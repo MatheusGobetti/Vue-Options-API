@@ -22,21 +22,26 @@
           <img v-bind:src="image" alt="" srcset="" :class="{ 'out-of-stock-img': !inStock }" />
         </div>
         <div class="product-info">
-          <h1>{{ product.name }}</h1>
+          <h1>{{ title }}</h1>
           <p>{{ product.description }}</p>
-          <p v-show="onSale">On Sale!</p>
-          <p v-if="inventory > 10">In Stock</p>
-          <p v-else-if="inventory <= 10 && inventory > 0">Almost Sold Out!</p>
-          <p v-else>Out of Stock</p>
+          <p v-show="onSale && inStock">On Sale!</p>
+          <p v-if="variants[selectedVariant].quantity >= 10 && inStock && onSale" :style="{ color: 'green' }">In Stock
+          </p>
+          <p v-else-if="variants[selectedVariant].quantity < 10 && variants[selectedVariant].quantity > 0 && onSale && inStock"
+            :style="{ color: 'orange' }">Almost Sold
+            Out!
+          </p>
+          <p v-else :style="{ color: 'red'}">Out of Stock</p>
           <a :href="url" target="_blank">Vue.Js Website</a>
           <ul>
             <li v-for="detail in details">{{ detail }}</li>
           </ul>
-          <div v-for="variant in variants" :key="variant.id" @mouseover="updateImage(variant.image)"
+          <div v-for="(variant, index) in variants" :key="variant.id" @mouseover="updateVariant(index)"
             class="color-circle" :style="{ backgroundColor: variant.color }"></div>
           <div class="button-container">
             <button class="button" @click="removeFromCart" :disabled="!cart">Remove from Cart</button>
-            <button class="button" @click="addToCart" :class="{ disabledButton: !inStock }" :disabled="!inStock">Add to
+            <button class="button" @click="addToCart" :class="{ disabledButton: !inStock }"
+              :disabled="cart === variants[selectedVariant].quantity">Add to
               Cart</button>
           </div>
         </div>
