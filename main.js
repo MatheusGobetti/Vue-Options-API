@@ -10,6 +10,7 @@ const App = Vue.createApp({
       url: "https://vuejs.org",
       inventory: 8,
       onSale: true,
+      inStock: false,
       details: ["50% cotton", "30% wool", "20% polyester"],
       variants: [{
         id: 2234,
